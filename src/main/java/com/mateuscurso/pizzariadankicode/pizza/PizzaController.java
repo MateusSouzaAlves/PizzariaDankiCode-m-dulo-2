@@ -8,8 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.List;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/pizzas")
@@ -19,27 +20,28 @@ public class PizzaController {
     private final PizzaService pizzaService;
 
 @PostMapping
-    public void cadastrar(@RequestBody @Valid PizzaDTO dto){
-
-    pizzaService.criarPizza(dto);
+    public ResponseEntity<PizzaDTO> cadastrar(@RequestBody @Valid PizzaDTO dto, UriComponentsBuilder uriBuilder){
+    PizzaDTO pizzaDTO = pizzaService.criarPizza(dto);
+    URI endereco = uriBuilder.path("/pizzas/{id}").buildAndExpand(pizzaDTO.getId()).toUri();
+    return ResponseEntity.created(endereco).body(pizzaDTO);
 }
 
 @GetMapping
-    public Page<PizzaDTO> buscarTodos(@PageableDefault(size = 10)Pageable paginacao){
-
-    return pizzaService.buscarTodos(paginacao);
+    public ResponseEntity<Page<PizzaDTO>> buscarTodos(@PageableDefault(size = 10)Pageable paginacao){
+    Page<PizzaDTO> pizzas = pizzaService.buscarTodos(paginacao);
+    return ResponseEntity.ok(pizzas);
 }
 
 @GetMapping("/{id}")
-    public PizzaDTO buscarPorID(@PathVariable @NotNull Long id){
-
-    return pizzaService.buscarPorID(id);
+    public ResponseEntity<PizzaDTO> buscarPorID(@PathVariable @NotNull Long id){
+    PizzaDTO pizzaDTO = pizzaService.buscarPorID(id);
+    return ResponseEntity.ok(pizzaDTO);
 }
 
 @PutMapping("/{id}")
-    public PizzaDTO atualizar(@PathVariable @NotNull Long id, @RequestBody @Valid PizzaDTO dto){
+    public ResponseEntity<PizzaDTO> atualizar(@PathVariable @NotNull Long id, @RequestBody @Valid PizzaDTO dto){
     PizzaDTO pizzaAtualizada = pizzaService.atualizarPizza(id, dto);
-    return pizzaAtualizada;
+    return ResponseEntity.ok(pizzaAtualizada);
 }
 
 @DeleteMapping("/{id}")
