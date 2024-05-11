@@ -20,6 +20,6 @@ public class Pizza {
     private Sabor sabor;
     @Enumerated(EnumType.STRING)
     private Categoria categoria;
-              //DTO
+    //DTO              //ENTIDADE
 // CLIENTE -- API -- SERVIDOR/DATABASE
 }
