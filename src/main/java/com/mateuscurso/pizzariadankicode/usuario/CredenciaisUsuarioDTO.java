@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class CredenciaisUsuarioDTO {
     private String login;
-    private String senha;
+    private String password;
 }
