@@ -1,5 +1,6 @@
 package com.mateuscurso.pizzariadankicode.usuario;
 
+import com.mateuscurso.pizzariadankicode.config.CriptografiaSenha;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +24,11 @@ public class UserService implements UserDetailsService {
 
     public DadosUsuarioCadastro criarUsuario(DadosUsuarioCadastro dto){
         Usuario usuario = modelMapper.map(dto, Usuario.class);
+
+        //Criptografando a senha
+        String senhaCriptografa = CriptografiaSenha.criptografia(usuario.getPassword());
+        usuario.setPassword(senhaCriptografa);
+
         repository.save(usuario);
         return modelMapper.map(usuario, DadosUsuarioCadastro.class);
     }
