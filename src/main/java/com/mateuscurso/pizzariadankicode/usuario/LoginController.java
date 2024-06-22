@@ -1,5 +1,6 @@
 package com.mateuscurso.pizzariadankicode.usuario;
 
+import com.mateuscurso.pizzariadankicode.config.TokenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +19,14 @@ public class LoginController {
 
     private final AuthenticationManager autenticador;
 
+    private final TokenService tokenService;
+
     @PostMapping
-    public ResponseEntity<Void> validacaoCredenciaisUsuario(@RequestBody @Valid CredenciaisUsuarioDTO credenciais){
+    public ResponseEntity validacaoCredenciaisUsuario(@RequestBody @Valid CredenciaisUsuarioDTO credenciais){
         UsernamePasswordAuthenticationToken token =
                 new UsernamePasswordAuthenticationToken(credenciais.getLogin(),credenciais.getPassword());
         Authentication autenticacao = autenticador.authenticate(token);
 
-        return  ResponseEntity.ok().build();
+        return  ResponseEntity.ok(tokenService.criarToken((Usuario) autenticacao.getPrincipal()));
     }
 }
