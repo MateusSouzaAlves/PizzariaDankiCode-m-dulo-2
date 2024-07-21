@@ -1,5 +1,6 @@
 package com.mateuscurso.pizzariadankicode.usuario;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import java.net.URI;
 @RestController
 @RequestMapping("/usuarios")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearer-key")
 public class UsuarioController {
 
     private final UserService userService;
